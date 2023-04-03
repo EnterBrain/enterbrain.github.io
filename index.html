@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>DnD 5e builder</title>
+        <link href="pathbuilder-min.css" rel="stylesheet">
+        <link href="global.css" rel="stylesheet">
+        <link href="builderstyle.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js" defer></script>
+        <script src="buldercode.js" defer></script>
+    </head>
+    <body>
+        <div class="top-bar">
+            <div id="main-container" style="display: flex;">
+                <div id="divBuild" class="main-column-left">
+                    <div id="divBuildLevels">
+                        <div class="centered-div-holder">
+                            <div class="subtitle" style="margin-top: 1em;">Уровень персонажа: <span id="characterLvlSpan">1</span></div>
+                        </div>
+                        <div class="build-section multiclass-wrap">
+                            <div class="centered-div-holder">
+                                <div class="subtitle" style="margin-top: 1em;">Базовый Класс</div>
+                            </div>
+                            <aside class="class-lvl-wrap" id="baseClassWrap" aria-label="Уровень 1: Опции" style="margin-top: 1em;">
+                              <div class="rounded-rectangle class-levels class-level1">
+                                  <div class="centered-div-holder" style="margin-bottom: 0.5em;">
+                                      <div class="subtitle">Уровень 1</div>
+                                  </div>
+                                  <!-- baseRace -->
+                                  <div id="optionRace" class="small-margin-right-bottom div-button">
+                                      <div class="button-column">
+                                          <img src="img/icon_ancestry.png" class="button-icon">
+                                      </div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Раса</div>
+                                          <div><span class="button-selection select-race" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalRace -->
+                                  <div id="modalRace" class="modal" dnd-data=""></div>
+                                  <!-- baseRaceVariant -->
+                                  <div id="optionRaceVariant" class="small-margin-right-bottom div-button indent-1 hidden" dnd-data="">
+                                      <div class="button-column">
+                                          <img src="img/icon_ancestry.png" class="button-icon">
+                                      </div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Вариант расы</div>
+                                          <div><span class="button-selection select-race-variant" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalRaceVariant -->
+                                  <div id="modalRaceVariant" class="modal" dnd-data=""></div>
+                                  <!-- baseFeatBase -->
+                                  <div id="optionFeatBase" class="small-margin-right-bottom div-button indent-2 hidden" dnd-data="">
+                                      <div class="button-column"><img src="img/icon_general.png" class="button-icon" height="40"></div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Черта</div>
+                                          <div><span class="button-selection select-feat-base" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalFeatBase -->
+                                  <div id="modalFeatBase" class="modal" dnd-data=""></div>
+                                  <!-- baseBackground -->
+                                  <div id="optionBackground" class="small-margin-right-bottom div-button">
+                                      <div class="button-column"><img src="img/icon_background.png" class="button-icon"></div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Предыстория</div>
+                                          <div><span class="button-selection select-background" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalBackground -->
+                                  <div id="modalBackground" class="modal" dnd-data=""></div>
+                                  <!-- baseClassBase -->
+                                  <div id="optionClassBase" class="small-margin-right-bottom div-button">
+                                      <div class="button-column"><img src="img/icon_class.png" class="button-icon"></div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Класс</div>
+                                          <div><span class="button-selection select-class-base" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalClassBase -->
+                                  <div id="modalClassBase" class="modal" dnd-data=""></div>
+                                  <!-- baseAbilitiesBase -->
+                                  <div id="optionAbilitiesBase" class="small-margin-right-bottom div-button hidden" dnd-data="">
+                                      <div class="button-column"><img src="img/icon_dex_cap.png" class="button-icon" height="40"></div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Характеристики</div>
+                                          <div><span class="button-selection select-abilities-base" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalAbilitiesBase -->
+                                  <div id="modalAbilitiesBase" class="modal" dnd-data=""></div>
+                                  <!-- baseSkillsBase -->
+                                  <div id="optionSkillsBase" class="small-margin-right-bottom div-button hidden" dnd-data="">
+                                      <div class="button-column"><img src="img/icon_skill.png" class="button-icon" height="40"></div>
+                                      <div class="button-column">
+                                          <div class="small-text grey-text">Навыки</div>
+                                          <div><span class="button-selection select-skills-base" dnd-data="" dnd-backup="">Не выбрано</span><img style="display: none; margin-left: 0.3em;"></div>
+                                      </div>
+                                      <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                  </div>
+                                  <!-- modalSkillsBase -->
+                                  <div id="modalSkillsBase" class="modal" dnd-data="">
+                                      <div class="modal-content" style="width: 40em;">
+                                          <div class="dialog-top-bar">
+                                              <div class="dialog-title">Установите стартовые характеристики</div>
+                                              <div></div>
+                                              <div style="display: none;"></div>
+                                          </div>
+                                          <div class="padding-standard">
+                                              <div class="small-text rounded-rectangle-white race-modifiers-wrap"></div>
+                                              <div class="rounded-rectangle-white">
+                                                  <div class="bold-standard" style="margin-bottom: 0.5em;">Free Boosts</div>
+                                                  <div class="grid-container">
+                                                      <div class="grid-item">
+                                                          <div style="cursor: pointer; margin-top: 0.3em;">
+                                                              <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-2" class="checkbox-standard"></div>
+                                                              <div style="display: inline-block; margin-left: 0.5em; width: 3em;">STR</div><span class="abilityMod" style="margin-left: 0.5em;">+3</span><span class="abilityTotal" style="margin-left: 0.5em;">16</span>
+                                                          </div>
+                                                          <div style="cursor: pointer; margin-top: 0.3em;">
+                                                              <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-2" class="checkbox-standard"></div>
+                                                              <div style="display: inline-block; margin-left: 0.5em; width: 3em;">CON</div><span class="abilityMod" style="margin-left: 0.5em;">+2</span><span class="abilityTotal" style="margin-left: 0.5em;">14</span>
+                                                          </div>
+                                                          <div style="cursor: pointer; margin-top: 0.3em;">
+                                                              <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-2" class="checkbox-standard"></div>
+                                                              <div style="display: inline-block; margin-left: 0.5em; width: 3em;">WIS</div><span class="abilityMod" style="margin-left: 0.5em;">+1</span><span class="abilityTotal" style="margin-left: 0.5em;">12</span>
+                                                          </div>
+                                                          </div>
+                                                          <div class="grid-item"><span class="centred-parent" style="margin-right: 2em;"><img src="img/icon_cog.png?v=dm-2" class="centred cogIcon">
+                                                              <div class="cogText centred">4</div>
+                                                          </span></div>
+                                                          <div class="grid-item">
+                                                          <div style="cursor: pointer; margin-top: 0.3em;">
+                                                              <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-2" class="checkbox-standard"></div>
+                                                              <div style="display: inline-block; margin-left: 0.5em; width: 3em;">DEX</div><span class="abilityMod" style="margin-left: 0.5em;">+0</span><span class="abilityTotal" style="margin-left: 0.5em;">10</span>
+                                                          </div>
+                                                          <div style="cursor: pointer; margin-top: 0.3em;">
+                                                              <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-2" class="checkbox-standard"></div>
+                                                              <div style="display: inline-block; margin-left: 0.5em; width: 3em;">INT</div><span class="abilityMod" style="margin-left: 0.5em;">+0</span><span class="abilityTotal" style="margin-left: 0.5em;">10</span>
+                                                          </div>
+                                                          <div style="cursor: pointer; margin-top: 0.3em;">
+                                                              <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-2" class="checkbox-standard"></div>
+                                                              <div style="display: inline-block; margin-left: 0.5em; width: 3em;">CHA</div><span class="abilityMod" style="margin-left: 0.5em;">-1</span><span class="abilityTotal" style="margin-left: 0.5em;">8</span>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="rounded-rectangle-white">
+                                                  <div style="cursor: pointer;">
+                                                      <div class="checkbox-container"><img src="img/checkbox_white_orange.png?v=dm-3" class="checkbox-standard"></div><span style="margin-left: 0.5em;">Override character creation ability scores</span>
+                                                  </div>
+                                                  <div class="grey-text hidden" style="margin: 0.5em;">Please use Override Character Creation Ability Scores if you wish to add voluntary flaws to your character.</div>
+                                                  <table class="hidden">
+                                                      <tr>
+                                                      <td><span class="override-ability-label">Str</span><input type="number" class="edittext-dark override-ability-input"></td>
+                                                      <td><span class="override-ability-label">Dex</span><input type="number" class="edittext-dark override-ability-input"></td>
+                                                      </tr>
+                                                      <tr>
+                                                      <td><span class="override-ability-label">Con</span><input type="number" class="edittext-dark override-ability-input"></td>
+                                                      <td><span class="override-ability-label">Int</span><input type="number" class="edittext-dark override-ability-input"></td>
+                                                      </tr>
+                                                      <tr>
+                                                      <td><span class="override-ability-label">Wis</span><input type="number" class="edittext-dark override-ability-input"></td>
+                                                      <td><span class="override-ability-label">Cha</span><input type="number" class="edittext-dark override-ability-input"></td>
+                                                      </tr>
+                                                  </table>
+                                              </div>
+                                          </div>
+                                          <div class="modal-buttons">
+                                              <div class="modal-button modal-button-finished">Закончить</div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                            </aside>
+                            <aside class="class-lvl-wrap" aria-label="Уровень 2: Опции" style="margin-top: 1em;">
+                                <div class="rounded-rectangle class-levels class-level2">
+                                    <div class="centered-div-holder" style="margin-bottom: 0.5em;">
+                                        <div class="subtitle">Уровень 2</div>
+                                    </div>
+                                    <div class="hidden" style="text-align: center;"></div>
+                                    <div class="grey-text hidden" style="text-align: center; padding: 0.3em;"></div>
+                                    <div id="id_parent_feats">
+                                    <div class="small-margin-right-bottom div-button">
+                                        <div class="button-column"><img class="button-icon" src="img/icon_class.png"></div>
+                                        <div class="button-column">
+                                        <div class="small-text grey-text">Class Feat</div>
+                                        <div><span class="button-selection red-text">Not Selected</span><img class="action-icon" style="display: none; margin-left: 0.3em;"></div>
+                                        </div>
+                                        <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                    </div>
+                                    <div class="small-margin-right-bottom div-button">
+                                        <div class="button-column"><img class="button-icon" src="img/icon_skill.png"></div>
+                                        <div class="button-column">
+                                        <div class="small-text grey-text">Skill Feat</div>
+                                        <div><span class="button-selection red-text">Not Selected</span><img class="action-icon" style="display: none; margin-left: 0.3em;"></div>
+                                        </div>
+                                        <div class="warning-text hidden small-text">Prerequisites not met or taken too many times!</div>
+                                    </div>
+                                    </div>
+                                    <div id="id_parent_options" style="display: none;"></div>
+                                    <div id="id_parent_free"></div>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-column-right"></div>
+            </div>
+        </div>
+    </body>
+</html>
