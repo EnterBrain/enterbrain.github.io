@@ -773,14 +773,7 @@ $( document ).ready(function() {
                 var setPointsType = setPoints.find('select.set-modifier-types').attr('dnd-data');
                 $.each(nameAbilities, function( nameAblts, abilities ) {
                     if ( nameAblts != 'free' && nameAblts != 'all' ){
-                        var baseAblts = 0;
-                        if ( setPointsType == 'point_buy' ){
-                            baseAblts = parseInt($('#calc_' + nameAblts + '_base').html());
-                        } else if ( setPointsType == 'point_distr' ) {
-                            baseAblts = parseInt($('#calc_' + nameAblts + '_base').val());
-                        } else if ( setPointsType == 'point_cust' ) {
-                            baseAblts = parseInt($('#calc_' + nameAblts + '_base').val());
-                        }
+                        var baseAblts = parseInt($('#calc_' + nameAblts + '_base').attr('dnd-data'));
                         var raceAblts = parseInt($('#calc_' + nameAblts + '_race').html());
                         var featAblts = parseInt($('#calc_' + nameAblts + '_feat').html());
                         var totalAblts = baseAblts + raceAblts + featAblts;
@@ -817,8 +810,28 @@ $( document ).ready(function() {
                         }
                         abilitiesString += $(this).html();
                     });
-                    optionAbilitiesBaseSpan.attr('dnd-data',abilitiesString);
                     optionAbilitiesBaseSpan.text(abilitiesString);
+                    var abilitiesObj = {};
+                    abilitiesObj['race_modifiers'] = [];
+                    modalAbilitiesBase.find('span.race-modifiers').each(function(){
+                        var valueEl = $(this).find('.race-modifier-values').attr('dnd-data');
+                        var typeEl = $(this).find('.race-modifier-types').attr('dnd-data');
+                        abilitiesObj['race_modifiers'].push({type: typeEl, value: valueEl});
+                    });
+                    abilitiesObj['feat_modifiers'] = [];
+                    modalAbilitiesBase.find('span.feat-modifiers').each(function(){
+                        var valueEl = $(this).find('.feat-modifier-values').attr('dnd-data');
+                        var typeEl = $(this).find('.feat-modifier-types').attr('dnd-data');
+                        abilitiesObj['feat_modifiers'].push({type: typeEl, value: valueEl});
+                    });
+                    abilitiesObj['set_modifier_types'] = modalAbilitiesBase.find('select.set-modifier-types').attr('dnd-data');
+                    abilitiesObj['calc_base'] = {};
+                    $.each(nameAbilities, function( nameAblts, abilities ) {
+                        if ( nameAblts != 'free' && nameAblts != 'all' ){
+                            abilitiesObj['calc_base'][nameAblts] = parseInt($('#calc_' + nameAblts + '_base').attr('dnd-data'));
+                        }
+                    });
+                    optionAbilitiesBaseSpan.attr('dnd-data',JSON.stringify(abilitiesObj));
                 } else {
                     optionAbilitiesBaseSpan.attr('dnd-data','');
                     optionAbilitiesBaseSpan.text('Не выбрано');
@@ -898,7 +911,7 @@ $( document ).ready(function() {
                         setPoints.find('span.ro.stat__value').each(function(){
                             var typeStatValue = $(this).attr('dnd-data');
                             $(this).html('').append('<span class="calc_stat_button btn btn-minus" dnd-data="'+typeStatValue+'">-</span>'+
-                                                    '<span class="calc_stat_input btn" id="calc_'+typeStatValue+'_base">8</span>'+
+                                                    '<span class="calc_stat_input btn" id="calc_'+typeStatValue+'_base" dnd-data="8">8</span>'+
                                                     '<span class="calc_stat_button btn btn-plus" dnd-data="'+typeStatValue+'">+</span>');
                         });
 
@@ -919,6 +932,7 @@ $( document ).ready(function() {
                                 if (calc_cost_current >= cost_minus){
                                     calc_cost_currentSpan.html(calc_cost_current - cost_minus);
                                     statValueBtn.html(statValue - 1);
+                                    statValueBtn.attr('dnd-data',(statValue - 1));
                                     calc_str_costSpan.html(calc_str_cost - cost_minus);
                                     recalc_final_modifier();
                                 } else {
@@ -946,6 +960,7 @@ $( document ).ready(function() {
                                 if ((calc_cost_max - calc_cost_current) >= cost_plus){
                                     calc_cost_currentSpan.html(calc_cost_current + cost_plus);
                                     statValueBtn.html(statValue + 1);
+                                    statValueBtn.attr('dnd-data',(statValue + 1));
                                     calc_str_costSpan.html(calc_str_cost + cost_plus);
                                     recalc_final_modifier();
                                 } else {
@@ -991,7 +1006,14 @@ $( document ).ready(function() {
                         // create elements for custom point
                         setPoints.find('span.ro.stat__value').each(function(){
                             var typeStatValue = $(this).attr('dnd-data');
-                            $(this).html('').append('<input type="number" class="edittext-dark" style="width: 3em;" id="calc_'+typeStatValue+'_base" dnd-data="'+typeStatValue+'" value="8">');
+                            $(this).html('').append('<input type="number" class="edittext-dark" style="width: 3em;" id="calc_'+typeStatValue+'_base" dnd-data="8" value="8">');
+                        });
+                        
+                        setPoints.find('input.edittext-dark').each(function() {
+                            $(this).change(function() {
+                                $(this).attr('dnd-data',$(this).val());
+                                recalc_final_modifier();
+                            }).change();
                         });
                     }
                     reset_final_modifier();
