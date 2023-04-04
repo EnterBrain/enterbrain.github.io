@@ -231,7 +231,7 @@ $( document ).ready(function() {
 
     // Функция проверки отображения пункта характеристик
     function displaySkillsBase(){
-        var currKey = (optionRaceSpan.attr('dnd-data') + '__' + optionRaceVariantSpan.attr('dnd-data') + '__' + optionFeatBaseSpan.attr('dnd-data') + '__' + optionBackgroundSpan.attr('dnd-data') + '__' + optionClassBaseSpan.attr('dnd-data') + '__' + optionAbilitiesBaseSpan.attr('dnd-data'));
+        var currKey = (optionRaceSpan.attr('dnd-data') + '__' + optionRaceVariantSpan.attr('dnd-data') + '__' + optionFeatBaseSpan.attr('dnd-data') + '__' + optionBackgroundSpan.attr('dnd-data') + '__' + optionClassBaseSpan.attr('dnd-data'));
         if (optionSkillsBase.attr('dnd-data') != currKey){
             if ( optionRaceSpan.attr('dnd-data') != ''
                 && optionRaceVariantSpan.attr('dnd-data') != ''
@@ -239,8 +239,7 @@ $( document ).ready(function() {
                     || (optionRaceVariantSpan.attr('dnd-data') == 'variant_human'
                         && optionFeatBaseSpan.attr('dnd-data') != '') )
                 && optionBackgroundSpan.attr('dnd-data') != ''
-                && optionClassBaseSpan.attr('dnd-data') != '' 
-                && optionAbilitiesBaseSpan.attr('dnd-data') != '' ){
+                && optionClassBaseSpan.attr('dnd-data') != '' ){
                 optionSkillsBaseSpan.attr('dnd-data','').text('Не выбрано');
                 optionSkillsBase.attr('dnd-data', currKey).removeClass('hidden');
             } else {
@@ -1030,28 +1029,117 @@ $( document ).ready(function() {
     }
 
     // Функция заполнения окна характеристик
-    function fillModaloptionSkillsBase(){
-        if ( modalSkillsBase.attr('dnd-data') != optionSkillsBase.attr('dnd-data') ){
-            modalSkillsBase.attr('dnd-data', optionSkillsBase.attr('dnd-data'));
-            var lastRaceCode = optionRaceSpan.attr('dnd-data');
-            var lastRaceVariantCode = optionRaceVariantSpan.attr('dnd-data');
-            var raceModifiers = modalSkillsBase.find('.race-modifiers-wrap');
-            raceModifiers.html('');
-            raceModifiers.append('<div class="bold-standard" style="margin-bottom: 0.6em; font-size: 1.2em;">Расовые модификаторы</div><p class="hidden warning-text">Illegal Ancestry Boosts!</p>');
-            $.each(arrRaces[lastRaceCode].variants[lastRaceVariantCode].modAttr, function( index, abilities ) {
-                // console.log( abilities.type + ': ' + abilities.value );
-                if (abilities.type != 'free'){
-                    raceModifiers.append('<span class="race-modifiers race-modifier'+(index+1)+'" style="margin-right: 0.5em;margin-bottom: 0.6em; font-size: 1.2em;"><img class="small-icon" src="img/icon_boost.png"><span class="small-margin-right-bottom race-modifier'+(index+1)+'-value" dnd-data="'+abilities.value+'">'+abilities.value+'</span> <span class="small-margin-right-bottom race-modifier'+(index+1)+'-type" dnd-data="intelligence">'+nameAbilities[abilities.type].fullname+'</span></span>');
-                } else {
-                    raceModifiers.append('<span class="race-modifiers race-modifier'+(index+1)+'" style="margin-right: 0.5em;margin-bottom: 0.6em; font-size: 1.2em;"><img class="small-icon" src="img/icon_boost.png"><select class="small-margin-right-bottom spinner-dark race-modifier'+(index+1)+'-value" dnd-data="'+abilities.value+'"><option value="str">Сила</option><option value="dex">Ловкость</option><option value="con">Телосложение</option><option value="int">Интеллект</option><option value="wis">Мудрость</option><option value="cha">Харизма</option></select></span>');
+    function fillModalSkillsBase(){
+        if ( modalSkillsBase.attr('dnd-data') != optionSkillsBase.attr('dnd-data') ){            
+            modalSkillsBase.attr('dnd-data', optionSkillsBase.attr('dnd-data')).html('').append(
+                '<div class="modal-content" style="width: 40em;">'+
+                    '<div class="dialog-top-bar">'+
+                        '<div class="dialog-title">Установите стартовые навыки</div>'+
+                        '<div></div>'+
+                        '<div style="display: none;"></div>'+
+                    '</div>'+
+                    '<div class="padding-standard">'+
+                        '<div class="rounded-rectangle-white background-skills-wrap"></div>'+
+                        '<div class="rounded-rectangle-white class-skills-wrap"></div>'+
+                    '</div>'+
+                    '<div class="modal-buttons">'+
+                        '<div class="modal-button modal-button-finished">Завершить</div>'+
+                    '</div>'+
+                '</div>'
+            );
+
+            // backgrounds-skills
+            var lastBackgroundCode = optionBackgroundSpan.attr('dnd-data');
+            var backgroundSkills = modalSkillsBase.find('.background-skills-wrap');
+            backgroundSkills.html('').append('<div class="bold-standard" style="margin-bottom: 0.6em;">Навыки предыстории</div>');
+            $.each(arrBackgrounds[lastBackgroundCode].freeSkills, function( index, skillID ) {
+                backgroundSkills.append('<span class="background-skills background-skill'+(index+1)+'" style="margin-right: 0.5em;margin-bottom: 0.6em; font-size: 1.2em;"><img class="small-icon" src="img/icon_boost.png"><span class="small-margin-right-bottom modal-skill-values background-skill-values background-skill-values'+(index+1)+'" dnd-data="'+skillID+'">'+arrSkills[skillID].name+'</span></span>');
+            });
+
+            // class-skills
+            var lastClassCode = optionClassBaseSpan.attr('dnd-data');
+            var classSkills = modalSkillsBase.find('.class-skills-wrap');
+            classSkills.html('').append('<div class="bold-standard" style="margin-bottom: 0.6em;">Навыки класса</div>');
+            $.each(arrClasses[lastClassCode].freeSkills, function( index, skillsEl ) {
+                if ( skillsEl.type == 'free' ){
+                    for ( let i = 0; i < skillsEl.value; i++ ) {
+                        if ( ( i > 0 ) && (( i % 2 ) == 0) ) {
+                            classSkills.append('<br>');
+                        }
+                        var spanSelect = '<select class="small-margin-right-bottom spinner-dark modal-skill-values class-skills-values class-skills-value'+(index+1)+'" dnd-data="empty"><option value="empty" selected>-</option>';
+                        // arrSkills
+                        $.each(arrSkills, function( skillID, skillEl ) {
+                            spanSelect += '<option value="' + skillID + '">' + skillEl.name + '</option>';
+                        });
+                        spanSelect += '</select>';
+                        classSkills.append('<span class="class-skills class-skill'+(index+1)+'" style="margin-right: 0.5em;margin-bottom: 0.6em; font-size: 1.2em;"><img class="small-icon" src="img/icon_boost.png">' + spanSelect + '</span>');
+                    }
+                } else if ( skillsEl.type == 'var' ){
+                    for ( let i = 0; i < skillsEl.value; i++ ) {
+                        if ( ( i > 0 ) && (( i % 2 ) == 0) ) {
+                            classSkills.append('<br>');
+                        }
+                        var spanSelect = '<select class="small-margin-right-bottom spinner-dark modal-skill-values class-skills-values class-skills-value'+(index+1)+'" dnd-data="empty"><option value="empty" selected>-</option>';
+                        // arrSkills
+                        $.each(skillsEl.variants, function( index2, skillID ) {
+                            spanSelect += '<option value="' + skillID + '">' + arrSkills[skillID].name + '</option>';
+                        });
+                        spanSelect += '</select>';
+                        classSkills.append('<span class="class-skills class-skill'+(index+1)+'" style="margin-right: 0.5em;margin-bottom: 0.6em; font-size: 1.2em;"><img class="small-icon" src="img/icon_boost.png">' + spanSelect + '</span>');
+                    }
                 }
+            });
+
+            function recheck_skills(){
+                var selectedSkills = true;
+                var selectedSkillsArr = [];
+                modalSkillsBase.find('.modal-skill-values').each(function(){
+                    if ($(this).attr('dnd-data') == 'empty'){
+                        selectedSkills = false;
+                    } else {
+                        selectedSkillsArr.push($(this).attr('dnd-data'));
+                    }
+                })
+                if (selectedSkills){
+                    optionSkillsBaseSpan.html('Выбрано').attr('dnd-data',JSON.stringify(selectedSkillsArr));
+                } else {
+                    optionSkillsBaseSpan.html('Не выбрано').attr('dnd-data','');
+                }
+            }
+
+            classSkills.find('select.class-skills-values').each(function() {
+                $(this).change(function() {
+                    if ( $(this).attr('dnd-data') != $(this).val() ){
+                        $(this).attr('dnd-data',$(this).find('option:selected:first').val());
+                        var classSkillsSelect = [];
+                        modalSkillsBase.find('span.background-skill-values').each(function(){
+                            if ($(this).attr('dnd-data') != 'empty'){
+                                classSkillsSelect.push($(this).attr('dnd-data'));
+                            }
+                        })
+                        modalSkillsBase.find('select.class-skills-values').each(function(){
+                            if ($(this).attr('dnd-data') != 'empty'){
+                                classSkillsSelect.push($(this).attr('dnd-data'));
+                            }
+                        }).each(function(){
+                            $(this).find("option").each(function(){
+                                if ($(this).is(':not(:selected)') && $.inArray( $(this).val(), classSkillsSelect ) >= 0) {
+                                    $(this).attr('disabled', true);
+                                } else {
+                                    $(this).attr('disabled', false);
+                                }
+                            });
+                        });
+                        recheck_skills();
+                    }
+                }).change();
             });
 
             modalSkillsBase.find('.modal-button-finished').click(function() {
                 modalSkillsBase.removeClass('modal-top');
             });
         } else {
-            console.log('fillModaloptionSkillsBase false');
+            console.log('fillModalSkillsBase false');
         }
     }
 
@@ -1120,7 +1208,7 @@ $( document ).ready(function() {
 
     // Выбор начальных характеристик
     optionSkillsBase.click(function() {
-        fillModaloptionSkillsBase();
+        fillModalSkillsBase();
         modalSkillsBase.addClass('modal-top');
     });
 
